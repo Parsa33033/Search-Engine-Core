@@ -60,8 +60,8 @@ public class Query implements IndexerInterface, Runnable{
 	}
 	
 	/**
-	 * uses a copy of invertedIndex of IndexerInterface in invertedIndexCopy
-	 * to query the results
+	 * uses a copy of invertedIndex of IndexerInterface (invertedIndexCopy==> <word,<url,tfidf*PageRank>>) 
+	 * to query the results and save the result in searchResult map
 	 */
 	public void query() {
 		
