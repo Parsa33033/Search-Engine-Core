@@ -60,11 +60,7 @@ public class TextTransformer implements IndexerInterface{
 	 * @return
 	 */
 	public String filterString(String s) {
-		s = s.toLowerCase();
-		s = s.replaceAll("(\\.+)|(\\,+)|(\\=+)|(\\-+)|(\\_+)|(\\>+)|(\\<+)", "");
-		s = stopWords.filteredString(s);
-		s = stemSentence(s);
-		return s;
+		
 	}
 	
 	/**
@@ -73,13 +69,7 @@ public class TextTransformer implements IndexerInterface{
 	 * @return
 	 */
 	public String stemSentence(String s) {
-		s = s.toLowerCase();
-		String[] str = s.split("\\s+");
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0 ; i<str.length ; i++) {
-			sb.append(" "+stemmer.stem(str[i])+" ");
-		}
-		return sb.toString();
+		
 	}
 	
 	/**
@@ -87,7 +77,7 @@ public class TextTransformer implements IndexerInterface{
 	 * @return
 	 */
 	public String stemString(String s) {
-		return stemmer.stem(s.toLowerCase());
+		
 	}
 	
 	/**
