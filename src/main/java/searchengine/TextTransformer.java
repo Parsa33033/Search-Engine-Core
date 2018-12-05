@@ -35,7 +35,16 @@ public class TextTransformer implements IndexerInterface{
 	 * to filter words and sentences
 	 */
 	public void stemDocWordCount() {
-		
+		for(Map.Entry<String, String> i : this.contentRepo.entrySet()) {
+			List<String> content = Arrays.asList(filterString(i.getValue()).toLowerCase().split("\\s+"));
+			Map<String, Integer> wordCount = new HashMap<String, Integer>();
+			for(String s : content) {	  
+				s = s.toLowerCase();
+				if(!stemString(s).equals(""))
+					wordCount.put(stemString(s), (wordCount.get(s)==null)? 1 : wordCount.get(s)+1);
+			}
+			docWordCountIndex.put(i.getKey(), wordCount);
+		}
 	}
 	
 	/**
