@@ -21,7 +21,19 @@ public class StopWords {
 	 * gets input from stopWordsFile and append each word to set of stopWords
 	 */
 	public StopWords() {
-		
+		try {			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(stopWordsFile)));
+			StringBuilder str = new StringBuilder();
+			while(reader.ready()) {
+				str.append(" "+reader.readLine()+" ");
+			}
+			String[] s = str.toString().split("\\s+");
+			stopWords = new HashSet<String>();
+			List<String> temp = Arrays.asList(s);
+			stopWords.addAll(temp);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}	
 	
 	/**
@@ -31,6 +43,12 @@ public class StopWords {
 	 * @return
 	 */
 	public String filteredString(String term) {
-		
+		StringBuilder str = new StringBuilder();
+		for(String s: term.split("\\s+")) {
+			if(!this.stopWords.contains(s.toLowerCase().trim())) {
+				str.append(" "+s+" ");
+			}
+		}
+		return str.toString();
 	}
 }
