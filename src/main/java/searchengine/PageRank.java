@@ -52,7 +52,20 @@ public class PageRank implements IndexerInterface{
 	 * @return
 	 */
 	public Matrix createMatrixM(Map<String, Set<String>> links, Map<String, Integer> urlIDs) {
-		
+		int n = urlIDs.size();
+		int k = 0;
+		Matrix M = new Matrix(new double[n][n]);
+		for(Map.Entry<String, Integer> j : urlIDs.entrySet()) {
+			Set<String> s = links.get(j.getKey());
+			s.retainAll(urlIDs.keySet());
+			k = s.size();
+			for(String i : s) {
+				if(urlIDs.containsKey(i)) {
+					M.set(urlIDs.get(i), j.getValue(), (double)1/k);					
+				}
+			}
+		}
+		return M;
 	}
 	
 	/**
@@ -62,7 +75,13 @@ public class PageRank implements IndexerInterface{
 	 * @return
 	 */
 	public Matrix createVectorR(int n, double coef) {
-		
+		double[][] vec = new double[n][1];
+		Matrix r = new Matrix(vec);
+		for(int i = 0 ; i<n ; i++) {
+			r.set(i, 0, 1);
+		}
+		r = r.times((double)coef);
+		return r;
 	}
 	
 	/**
@@ -75,7 +94,13 @@ public class PageRank implements IndexerInterface{
 	 * @return
 	 */
 	public boolean lessThanEpsilon(Matrix a, Matrix b, double eps, int n) {
-		
+		boolean less = true;
+		for(int i = 0 ; i<n ; i++) {
+			if(Math.abs(a.get(i, 0) - b.get(i, 0)) > eps) {
+				less = false;
+			}
+		}
+		return less;
 	}
 
 }
