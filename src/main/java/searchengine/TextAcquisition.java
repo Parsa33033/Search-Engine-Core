@@ -29,6 +29,12 @@ public class TextAcquisition implements IndexerInterface{
 	 * @return
 	 */
 	public String getTextTags() {
-		
+		StringBuilder str = new StringBuilder();
+		Elements elements = doc.select("h1,h2,h3,h4,h5,h6,p,a,h,div");
+		for(Element e : elements) { 
+			str.append(" "+e.text()+" ");
+		}
+		String documentText = str.toString();
+		return documentText;
 	}
 }
