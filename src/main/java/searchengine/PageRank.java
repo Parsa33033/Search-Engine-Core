@@ -29,8 +29,30 @@ public class PageRank implements IndexerInterface{
 	 * @param urlIDs
 	 */
 	public void findPageRank(Map<String, Set<String>> links, Map<String, Integer> urlIDs) {
-		
-		
+		int n = links.size();
+		double epsilon = Math.pow(Math.E, -10);
+		double beta = 0.8;
+
+		//create matrix M
+		double[][] m = new double[n][n];
+		Matrix M = createMatrixM(links, urlIDs);
+		for(int i = 0 ; i < n ; i++) {
+			for(int j = 0 ; j<n ; j++) {
+				// A = beta * M + (1-beta)/N
+				M.set(i, j, M.get(i, j)*beta + (1-beta)/n);
+			}
+		}
+
+		//create vector r
+		double[][] v = new double[1][n];
+		Matrix r = createVectorR(n, (double)1/n);
+		Matrix r_prev = null;
+		do {
+			r_prev = r;
+			r = M.times(r);
+		}while(!this.lessThanEpsilon(r, r_prev, epsilon, n));
+
+		savePageRanks(r, urlIDs);
 	}
 	
 	/**
