@@ -11,7 +11,10 @@ public class TFIDF {
 	 * @return
 	 */
 	public double tf(Map<String, Integer> doc, String term) {
-		
+		if(doc.containsKey(term)) {
+			return (double)((double)doc.get(term)/doc.size());
+		}
+		return 0;
 	}
 	
 	/**
@@ -21,7 +24,13 @@ public class TFIDF {
 	 * @return
 	 */
 	public double idf(Map<String, Map<String, Integer>> docs, String term) {
-		
+		int n = 0;
+		for(Map.Entry<String, Map<String, Integer>> m : docs.entrySet()) {
+			if(m.getValue().containsKey(term.toLowerCase())) {
+				n++;
+			}
+		}
+		return Math.log((double)docs.size()/n);
 	}
 	
 	/**
