@@ -52,7 +52,15 @@ public class TextTransformer implements IndexerInterface{
 	 * to populate IndexerInterface fwdIndex
 	 */
 	public void createFWDIndex() {
-		
+		double tf_idf = 0;
+		for(Map.Entry<String, Map<String, Integer>> m : this.docWordCountIndex.entrySet()) {
+			Map<String, Double> tempMap = new HashMap<String, Double>();
+			for(Map.Entry<String, Integer> term : m.getValue().entrySet()) {
+				 tf_idf = tfidf.tfidf(this.docWordCountIndex, term.getKey().toLowerCase(), m.getKey());
+				 tempMap.put(term.getKey(), tf_idf);
+			}
+			this.fwdIndex.put(m.getKey(), tempMap);
+		}
 	}
 	
 	/**
