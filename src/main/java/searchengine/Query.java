@@ -64,7 +64,36 @@ public class Query implements IndexerInterface, Runnable{
 	 * to query the results and save the result in searchResult map
 	 */
 	public void query() {
+		String[] str = this.query.split("\\s+");
+		Set<String> intersect = new HashSet<String>();
+		List<Set<String>> intersects = new ArrayList<Set<String>>();
+		for(int i = 0 ; i<str.length ; i++) {
+			if(this.invertedIndexCopy.containsKey(str[i]))
+				intersects.add(this.invertedIndexCopy.get(str[i]).keySet());        
+		}
+		if(!intersects.isEmpty()) {
+			for(Set<String> s: intersects) {
+				if(intersect.isEmpty()) {
+					intersect = s;
+				}else {
+					intersect = this.intersection(intersect, s);
+				}
+			}
+			if(!intersect.isEmpty()) {
+				for(String s : intersect) {
+					this.searchResult.put(s,(double) 0);
+					for(int i = 0 ; i<str.length ; i++) {
+						if(this.fwdIndexCopy.containsKey(s) && this.invertedIndexCopy.containsKey(str[i]) && this.invertedIndexCopy.get(str[i]).containsKey(s))
+							this.searchResult.put(s, this.searchResult.get(s)+ this.invertedIndexCopy.get(str[i]).get(s));
+					}
+				}	
+			}
+		}
 		
+		searchResult = sortByValue(searchResult);
+		for(Map.Entry<String, Double> m : searchResult.entrySet()) {
+			System.out.println("---"+m.getKey()+"---"+m.getValue());
+		}
 		
 	}
 	
