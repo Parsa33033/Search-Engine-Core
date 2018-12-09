@@ -104,7 +104,17 @@ public class Query implements IndexerInterface, Runnable{
 	 * @return
 	 */
 	public Set<String> intersection(Set<String> a, Set<String> b) {
-	 
+	    // unnecessary; just an optimization to iterate over the smaller set
+	    if (a.size() > b.size()) {
+	        return intersection(b, a);
+	    }
+	    Set<String> results = new HashSet<String>();
+	    for (String element : a) {
+	        if (b.contains(element)) {
+	            results.add(element);
+	        }
+	    }
+	    return results;	 
 	}
 	
 	/**
