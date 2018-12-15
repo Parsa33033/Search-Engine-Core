@@ -68,7 +68,18 @@ public class TextTransformer implements IndexerInterface{
 	 * populate invertedIndex from IndexerInterface
 	 */
 	public void createInvertedIndex() {
-		
+		for(Map.Entry<String, Map<String, Double>> i : this.fwdIndex.entrySet()) {
+			for(Map.Entry<String, Double> j : i.getValue().entrySet()) {
+				Map<String, Double> temp = new HashMap<String, Double>();
+				temp.put(i.getKey(), (double)j.getValue() * (double)this.urlPageRank.get(getUrlHost(i.getKey())));
+				if(!this.invertedIndex.containsKey(j.getKey())) {
+					this.invertedIndex.put(j.getKey(),temp);					
+				}else {
+					temp.putAll(this.invertedIndex.get(j.getKey()));
+					this.invertedIndex.put(j.getKey(), temp);
+				}
+			}
+		}
 	}
 	
 	/**
